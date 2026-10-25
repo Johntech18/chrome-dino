@@ -1,0 +1,433 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", "Space Grotesk", sans-serif;
+  --font-body: "Space Grotesk", system-ui, sans-serif;
+  --font-pixel: "Press Start 2P", monospace;
+
+  --color-ink: #15181c;
+  --color-ink-soft: #2a2f36;
+  --color-paper: #ededea;
+  --color-paper-dim: #dcdcd6;
+  --color-volt: #2d5bff;
+  --color-amber: #ffc53d;
+  --color-live: #21c07a;
+  --color-rust: #d64933;
+}
+
+html,
+body {
+  background: var(--color-ink);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+::selection {
+  background: var(--color-amber);
+  color: var(--color-ink);
+}
+
+/* --- ambient page background --- */
+.bg-grid {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.055) 0px,
+    rgba(0, 0, 0, 0.055) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.7;
+}
+
+/* --- motion --- */
+@keyframes drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-48px);
+  }
+}
+.animate-drift {
+  animation: drift 3s linear infinite;
+}
+
+@keyframes blink-live {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(33, 192, 122, 0.55);
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 6px rgba(33, 192, 122, 0);
+  }
+}
+.animate-live {
+  animation: blink-live 1.8s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+.animate-bob {
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes reload-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+.animate-reload {
+  animation: reload-spin 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.animate-marquee {
+  animation: marquee 26s linear infinite;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-pop {
+  animation: pop 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes pop-loop {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 197, 61, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(255, 197, 61, 0);
+  }
+}
+.animate-pop-loop {
+  animation: pop-loop 1.6s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-rise {
+  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  12%,
+  88% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.animate-toast {
+  animation: toast-in 3.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* The Olympics identity is scoped to the mode, not the saved shop palette. */
+.olympics-theme {
+  --color-ink: #101f34;
+  --color-paper: #f5f3eb;
+  --color-amber: #e6be72;
+  --color-volt: #7ab5da;
+  --color-rust: #df5960;
+  --olympic-stripe: linear-gradient(to right,
+    #0085c7 0% 20%, #f4bd46 20% 40%, #243449 40% 60%,
+    #17946c 60% 80%, #df4755 80% 100%);
+  background: #101f34;
+}
+
+.olympics-theme .site-header::before,
+.game-stage--olympic .game-shell::before {
+  content: "";
+  display: block;
+  height: 4px;
+  background: var(--olympic-stripe);
+}
+
+.olympic-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin: 5px 0 32px;
+  animation: olympic-arrival 550ms ease-out both;
+}
+
+.olympic-eyebrow {
+  margin: 0 0 18px;
+  color: #99afc6;
+  font: 9px var(--font-pixel);
+  letter-spacing: 0.16em;
+  line-height: 1.7;
+}
+
+.olympic-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.8vw, 5.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.olympic-title > span:first-child { color: #e6be72; margin-left: 0.12em; }
+.olympic-title-period { color: #df5960; }
+
+.olympic-intro {
+  margin-top: 17px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #aab9ca;
+}
+
+.olympic-heading-rings { width: 126px; flex-shrink: 0; margin-right: 10px; }
+.olympic-heading-rings circle {
+  stroke-dasharray: 82;
+  animation: draw-ring 1000ms ease-out both;
+}
+.olympic-heading-rings circle:nth-child(2) { animation-delay: 80ms; }
+.olympic-heading-rings circle:nth-child(3) { animation-delay: 160ms; }
+.olympic-heading-rings circle:nth-child(4) { animation-delay: 240ms; }
+.olympic-heading-rings circle:nth-child(5) { animation-delay: 320ms; }
+
+.game-stage--olympic .game-shell {
+  background: #142840;
+  border-color: #e6be7240;
+  border-radius: 10px;
+  box-shadow: 0 20px 50px -24px #0009;
+}
+
+.olympic-masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px;
+  background: #f5f3eb;
+  color: #173350;
+}
+
+.olympic-masthead-brand { display: flex; align-items: center; gap: 18px; min-width: 0; }
+.olympic-masthead-rings { width: 64px; flex-shrink: 0; }
+.olympic-masthead-brand strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.olympic-masthead-brand span {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-body);
+  color: #6b7984;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+}
+
+.olympic-restart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 8px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 12px;
+  color: #173350;
+  border: 1px solid #17335026;
+  border-radius: 5px;
+  font: 7px var(--font-pixel);
+  cursor: pointer;
+  transition: background 180ms, border-color 180ms;
+}
+.olympic-restart:hover { background: #eadfc9; border-color: #bca984; }
+.olympics-theme button:focus-visible,
+.olympics-theme [role="application"]:focus-visible {
+  outline: 2px solid #e6be72;
+  outline-offset: 4px;
+}
+
+.game-stage--olympic .game-content { border-color: #17335015; }
+.game-stage--olympic .venue-strip { color: #173350; background: #eeece3; border-color: #17335010; }
+.game-stage--olympic .venue-strip > span { display: block; font-size: 7px; letter-spacing: 0.1em; }
+.olympic-playfield { background: #f5f3eb; }
+.game-stage--olympic .touch-pads button {
+  color: #173350;
+  background: #f5f3eb;
+  min-height: 56px;
+}
+.game-stage--olympic .touch-pads button:active { background: #e6be72; }
+.game-stage--olympic .touch-pads button:disabled { color: #8a949c; background: #e9e9e3; }
+
+.olympic-event-strip {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  padding: 0 16px;
+  border-top: 1px solid #ffffff16;
+  border-bottom: 1px solid #ffffff12;
+}
+.olympic-event-list { display: flex; flex: 1; gap: 16px; min-width: 0; overflow-x: auto; }
+.olympic-event {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  justify-content: center;
+  gap: 5px;
+  padding: 12px 0;
+  border-bottom: 2px solid transparent;
+  color: #9caec2;
+  font-size: 11px;
+  line-height: 1;
+  transition: color 250ms, border-color 250ms;
+}
+.olympic-event small { font: 6px var(--font-pixel); color: #627d98; }
+.olympic-event.is-active { color: #e6be72; border-bottom-color: #e6be72; }
+.olympic-event.is-active small { color: #e6be72; }
+.olympic-torch-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  align-self: center;
+  padding-left: 12px;
+  border-left: 1px solid #ffffff16;
+  color: #e6be72;
+  font-size: 11px;
+}
+.olympic-torch-count > span:last-child { color: #9caec2; font-size: 10px; }
+.game-stage--olympic .stage-status { background: #11243b; }
+.olympic-scoreboard { border-color: #e6be7233; background: #1b3048; }
+
+@keyframes olympic-arrival {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes draw-ring {
+  from { stroke-dashoffset: 82; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (max-width: 640px) {
+  .olympic-heading { margin: 0 0 26px; gap: 10px; }
+  .olympic-heading-rings { display: none; }
+  .olympic-title { font-size: clamp(2.15rem, 7.8vw, 3.5rem); }
+  .olympic-eyebrow { margin-bottom: 12px; font-size: 7px; letter-spacing: 0.09em; }
+  .olympic-intro { max-width: 34ch; font-size: 12px; margin-top: 12px; }
+  .olympic-masthead { padding: 14px 12px; }
+  .olympic-masthead-brand { gap: 12px; }
+  .olympic-masthead-rings { width: 46px; }
+  .olympic-masthead-brand strong { font-size: 12px; }
+  .olympic-masthead-brand span { font-size: 7px; letter-spacing: 0.09em; }
+  .olympic-restart { padding: 8px 10px; }
+  .olympic-restart > span { display: none; }
+  .olympic-event-strip { padding: 0 12px; gap: 8px; }
+  .olympic-event-list { gap: 14px; }
+  .olympic-torch-count { padding-left: 8px; }
+  .olympic-torch-count > span:last-child { display: none; }
+  .game-stage--olympic .venue-strip span { font-size: 8px; letter-spacing: 0.04em; }
+  .game-stage--olympic .venue-strip > span { font-size: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift,
+  .animate-live,
+  .animate-bob,
+  .animate-marquee,
+  .animate-reload,
+  .animate-pop,
+  .animate-pop-loop,
+  .animate-rise,
+  .olympic-heading,
+  .olympic-heading-rings circle {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
