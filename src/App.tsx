@@ -637,7 +637,7 @@ export default function App() {
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-3 px-4 py-7 sm:px-5 lg:px-8">
           <SpriteTile map={DINO_RUN_A} scale={2} color="#2f363e" className="opacity-70" />
           <div className="min-w-0">
-            <div className="font-display text-[13px] font-bold text-paper/70">Built with the Canvas 2D API</div>
+            <div className="font-display text-[13px] font-bold text-paper/70">Built by John Tech</div>
             <div className="mt-1 font-body text-[11.5px] text-paper/35">
               Sprites typed by hand · audio synthesised with WebAudio · progress kept in localStorage
             </div>
